@@ -11,6 +11,7 @@
 {{--使用通用视图--}}
 
 @extends('layouts.default')
+
 @section('title', '关于')
 
 @section('content')
