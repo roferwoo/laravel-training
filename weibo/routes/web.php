@@ -19,6 +19,7 @@
 Route::get('/', 'StaticPagesController@home')->name('home');
 Route::get('/help', 'StaticPagesController@help')->name('help');
 Route::get('/about', 'StaticPagesController@about')->name('about');
+Route::get('/test', 'StaticPagesController@t')->name('test');
 
 // 用户注册
 Route::get('signup', 'UsersController@create')->name('signup');
@@ -33,7 +34,9 @@ Route::resource('users', 'UsersController');
 // Route::patch('/users/{user}', 'UsersController@update')->name('users.update');// 更新用户
 // Route::delete('/users/{user}', 'UsersController@destroy')->name('users.destroy');// 删除用户
 
-
+Route::get('login', 'SessionsController@create')->name('login');// 显示登录页面
+Route::post('login', 'SessionsController@store')->name('login');// 创建新会话（登录）
+Route::delete('logout', 'SessionsController@destroy')->name('logout');// 销毁会话（退出登录）
 
 
 

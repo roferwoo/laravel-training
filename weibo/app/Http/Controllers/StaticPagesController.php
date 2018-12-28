@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class StaticPagesController extends Controller
@@ -24,4 +25,47 @@ class StaticPagesController extends Controller
         return view('static_pages/about');
     }
 
+    public function t(Request $request)
+    {
+        $imgUrl = 'http://www.sznews.com/news/pic/2018-12/09/224544a3-85ec-4d37-b37e-7fc637ae3981.1';//'http://www.lzbs.com.cn/zbxw/attachement/jpg/site2/20180722/d43d7e636a811cbe1c3e1a.jpg';
+        $header = [
+            'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36',
+            'Referrer' => parse_url($imgUrl)['host'],
+            'Host' => parse_url($imgUrl)['host'],
+        ];
+        $guzzle = new Client(['debug' => true]);
+
+        try {
+
+            var_dump($header);
+            $response = $guzzle->get($imgUrl, [
+                'headers' => $header,
+                'allow_redirects' => true,
+                // 'connect_timeout' => 1
+            ]);
+            var_dump($response->getHeader('Content-Type'));
+            dd($response);
+
+            // if ($response->getStatusCode() != 200) {
+            //     return false;
+            // }
+            // $type = $response->getHeader('Content-Type');
+            // if (isset($mimes[$type[0]])) {
+            //     $ext       = $mimes[$type[0]];
+            //     $file_path = $base_dir . '/' . $save_dir . '/' . $file_name . "." . $ext;
+            //
+            //     // 获取数据并保存
+            //     $bool = Storage::disk('oss')->put($file_path, $response->getBody()->getContents());
+            //     if ($bool) {
+            //         return 'https://' . config('filesystems.disks.oss.cdnDomain') . '/' . $file_path . '-thumb';
+            //         // return Storage::disk('oss')->url($file_path) . '-thumb';
+            //     }
+            //
+            // }
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            // Log::error('_uploadImgToAliOSS Exception:', ['errMsg' => $e->getMessage(), 'imgUrl' => $imgUrl]);
+        }
+
+    }
 }
