@@ -32,8 +32,8 @@ class SessionsController extends Controller
             // return redirect()->route('users.show', [Auth::user()]);
 
             // 友好的转向
-            $fallback = route('users.show', Auth::user());
-            return redirect()->indented($fallback);
+            $fallback = route('users.show', [Auth::user()]);
+            return redirect()->intended($fallback);
         } else {
             session()->flash('danger', '很抱歉，您的邮箱和密码不匹配');
             // return redirect()->back();// 页面不保存上次输入内容
