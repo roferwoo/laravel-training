@@ -27,7 +27,7 @@ class StaticPagesController extends Controller
 
     public function t(Request $request)
     {
-        $imgUrl = 'http://www.sznews.com/news/pic/2018-12/09/224544a3-85ec-4d37-b37e-7fc637ae3981.1';//'http://www.lzbs.com.cn/zbxw/attachement/jpg/site2/20180722/d43d7e636a811cbe1c3e1a.jpg';
+        $imgUrl = 'http://sn.people.com.cn/n2/2018/0819/NMediaFile/2018/0819/LOCAL201808191042000321410916308.jpg';//'http://www.lzbs.com.cn/zbxw/attachement/jpg/site2/20180722/d43d7e636a811cbe1c3e1a.jpg';
         $header = [
             'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36',
             'Referrer' => parse_url($imgUrl)['host'],
@@ -43,6 +43,8 @@ class StaticPagesController extends Controller
                 'allow_redirects' => true,
                 // 'connect_timeout' => 1
             ]);
+            // echo '<hr>';
+            dd($response->getStatusCode());
             var_dump($response->getHeader('Content-Type'));
             dd($response);
 
