@@ -11,12 +11,22 @@ class UsersController extends Controller
     public function __construct()
     {
         $this->middleware('auth', [
-            'except' => ['show', 'create', 'store'] // 类似于黑名单过滤机制
+            'except' => ['show', 'create', 'store', 'index'] // 类似于黑名单过滤机制
         ]);
 
         $this->middleware('guest', [
             'only' => ['create']
         ]);
+    }
+
+    public function index()
+    {
+        // $users = User::all();
+
+        // 分页
+        $users = User::paginate(10);
+
+        return view('users.index', compact('users'));
     }
 
     public function create()
