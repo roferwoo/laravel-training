@@ -53,6 +53,13 @@ Route::resource('/statuses', 'StatusesController', ['only' => ['store', 'destroy
 // Route::post('/statuses', 'StatusesController@store');// 处理创建微博请求
 // Route::delete('/statuses/{status}', 'StatusesController@destroy');// 处理删除微博请求
 
+// 关注 粉丝
+Route::get('/users/{user}/followings', 'UsersController@followings')->name('users.followings');// 显示用户的关注人列表
+Route::get('/users/{user}/followers', 'UsersController@followers')->name('users.followers');// 显示用户的粉丝列表
+
+Route::post('/users/followers/{user}', 'FollowersController@store')->name('followers.store');// 关注
+Route::delete('/users/followers/{user}', 'FollowersController@destroy')->name('followers.destroy');// 取消关注
+
 
 
 

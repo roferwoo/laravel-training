@@ -33,6 +33,14 @@ class StaticPagesController extends Controller
 
     public function t(Request $request)
     {
+
+        // 加密
+        $raw_str = encrypt(['Laravel学院', 'arr']);
+        // 解密
+        $decrypted_str = decrypt($raw_str);
+        dd(['after_encryt' => $raw_str, 'after_decrypt' => $decrypted_str]);
+
+        /*
         $imgUrl = 'http://sn.people.com.cn/n2/2018/0819/NMediaFile/2018/0819/LOCAL201808191042000321410916308.jpg';//'http://www.lzbs.com.cn/zbxw/attachement/jpg/site2/20180722/d43d7e636a811cbe1c3e1a.jpg';
         $header = [
             'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36',
@@ -74,6 +82,7 @@ class StaticPagesController extends Controller
             dd($e->getMessage());
             // Log::error('_uploadImgToAliOSS Exception:', ['errMsg' => $e->getMessage(), 'imgUrl' => $imgUrl]);
         }
+        */
 
     }
 }
