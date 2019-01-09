@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Auth;
+use QL\QueryList;
 
 class StaticPagesController extends Controller
 {
@@ -33,6 +34,82 @@ class StaticPagesController extends Controller
 
     public function t(Request $request)
     {
+        // QueryList
+
+        $data = QueryList::get('http://www.myzaker.com/')
+            // 设置采集规则
+            ->rules([
+                'title' => ['h2>a', 'text'],
+                'link' => ['h2>a', 'href'],
+                // 'source' => ['.subtitle>span', 'text'],// 来源
+                // 'pub_date' => ['.subtitle span', 'text'],// 发布时间
+                'image' => ['.img', 'style']
+            ])
+            // ->range('.flex-9')
+            ->queryData();
+        dd($data);
+
+        // 采集百度搜索结果列表的标题和链接
+        $data = QueryList::get('https://www.baidu.com/s?wd=QueryList')
+            // 设置采集规则
+            ->rules([
+                'title' => ['h3', 'text'],
+                'link' => ['h3>a', 'href'],
+                'em' => ['.c-abstract>em', 'text']
+            ])->queryData();
+        dd($data);
+
+        // $url = 'https://it.ithome.com/ityejie/';
+        // // 元数据采集规则
+        // $rules = [
+        //     // 采集文章标题
+        //     'title' => ['h2>a', 'text'],
+        //     // 采集链接
+        //     'link' => ['h2>a', 'href'],
+        //     // 采集缩略图
+        //     'img' => ['.list_thumbnail>img','src'],
+        //     // 采集文档简介
+        //     'desc' => ['.memo','text']
+        // ];
+        // // 切片选择器
+        // $range = '.ulcl';
+        // $rt = QueryList::get($url)->rules($rules)->range($range)->query()->getData();
+        // dd($rt->all());
+
+        $url = 'http://www.myzaker.com/';
+        $client = new Client();
+        $res = $client->request('GET', 'http://www.myzaker.com/');
+        $html = (string)$res->getBody();
+        $titles = QueryList::html($html)->rules([
+            'title' => ['h2>a', 'text']
+        ])->queryData();
+        $links = QueryList::html($html)->rules([
+            'link' => ['h2>a', 'href']
+        ])->queryData();
+        $sources = QueryList::html($html)->rules([
+            'source' => ['.subtitle span', 'text']
+        ])->queryData();
+        dd($titles, $links, $sources);
+
+        // HTTP客户端 GuzzleHttp
+        $client = new Client();
+        $res = $client->request('GET', 'https://www.baidu.com/s', [
+            'wd' => 'QueryList'
+        ]);
+        $html = (string)$res->getBody();
+
+        $data = QueryList::html($html)->find('h3')->texts();
+
+        //采集某页面所有的图片
+        $data = QueryList::get('http://cms.querylist.cc/bizhi/453.html')->find('img')->attrs('src');
+        //打印结果
+        dd($data->all());
+
+        // 分别采集百度搜索结果列表的标题和链接
+        $ql = QueryList::get('https://www.baidu.com/s?wd=QueryList');
+        $titles = $ql->find('h3>a')->texts();// 获取搜索结果标题列表
+        $links = $ql->find('h3>a')->attrs('href');// 获取搜索结果链接列表
+        dd($titles, $links);
 
         // 加密
         $raw_str = encrypt(['Laravel学院', 'arr']);
