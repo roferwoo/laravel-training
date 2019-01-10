@@ -16,7 +16,10 @@ class TopicsController extends Controller
 
     public function index()
     {
-        $topics = Topic::paginate();
+        // $topics = Topic::paginate(30);// 默认是15条
+        // 关联数据遍历时 N+1问题，使用预加载功能 来解决此问题
+        $topics = Topic::with('user', 'category')->paginate(30);
+        
         return view('topics.index', compact('topics'));
     }
 
