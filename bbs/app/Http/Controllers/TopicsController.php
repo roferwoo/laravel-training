@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Topic;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\TopicRequest;
 
 class TopicsController extends Controller
@@ -19,7 +17,7 @@ class TopicsController extends Controller
         // $topics = Topic::paginate(30);// 默认是15条
         // 关联数据遍历时 N+1问题，使用预加载功能 来解决此问题
         $topics = Topic::with('user', 'category')->paginate(30);
-        
+
         return view('topics.index', compact('topics'));
     }
 
