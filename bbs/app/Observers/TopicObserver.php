@@ -52,4 +52,10 @@ class TopicObserver
             dispatch(new TranslateSlug($topic));
         }
     }
+
+    public function deleted(Topic $topic)
+    {
+        // 注意的是，在模型监听器中，数据库操作需要避免再次 Eloquent 事件，所以这里我们使用了 DB 类进行操作
+        \DB::table('replies')->where('topic_id', $topic->id)->delete();
+    }
 }
