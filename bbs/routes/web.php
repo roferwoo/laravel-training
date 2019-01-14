@@ -52,3 +52,6 @@ Route::resource('categories', 'CategoriesController', ['only' => ['show']]);
 
 // 富文本编辑器Simditor 上传图片
 Route::post('upload_image', 'TopicsController@uploadImage')->name('topics.upload_image');
+
+
+Route::resource('replies', 'RepliesController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);
