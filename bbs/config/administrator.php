@@ -7,7 +7,7 @@ return array(
      * 后台的 URI 入口
      * @type string
      */
-    'uri' => 'bbs-admin',
+    'uri' => 'bbs-administrator',
 
     /*
      * Domain for routing.
@@ -21,7 +21,7 @@ return array(
      * 应用名称，在页面标题和左上角站点名称处显示
      * @type string
      */
-    'title' => config('app.name'),
+    'title' => env('APP_NAME', 'Laravel'),// config('app.name'),
 
     /*
      * The path to your model config directory
