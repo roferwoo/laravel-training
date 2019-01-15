@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Link;
 use App\Models\Topic;
 use App\Http\Requests\TopicRequest;
 use Auth;
@@ -39,7 +40,7 @@ class TopicsController extends Controller
         return $data;
     }
 
-    public function index(TopicRequest $request, Topic $topic, User $user)
+    public function index(TopicRequest $request, Topic $topic, User $user, Link $link)
     {
         // $topics = Topic::paginate(30);// 默认是15条
         // 关联数据遍历时 N+1问题，使用预加载功能 来解决此问题
@@ -49,7 +50,9 @@ class TopicsController extends Controller
 
         $active_users = $user->getActiveUsers();
 
-        return view('topics.index', compact('topics', 'active_users'));
+        $links = $link->getAllCached();
+
+        return view('topics.index', compact('topics', 'active_users', 'links'));
     }
 
     public function show(Request $request, Topic $topic)
