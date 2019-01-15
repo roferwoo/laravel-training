@@ -8,6 +8,7 @@ use App\Http\Requests\TopicRequest;
 use Auth;
 use App\Handlers\ImageUploadHandler;
 use App\Http\Requests\Request;
+use App\Models\User;
 
 class TopicsController extends Controller
 {
@@ -38,7 +39,7 @@ class TopicsController extends Controller
         return $data;
     }
 
-    public function index(TopicRequest $request, Topic $topic)
+    public function index(TopicRequest $request, Topic $topic, User $user)
     {
         // $topics = Topic::paginate(30);// 默认是15条
         // 关联数据遍历时 N+1问题，使用预加载功能 来解决此问题
@@ -46,7 +47,9 @@ class TopicsController extends Controller
 
         $topics = $topic->withOrder($request->order)->paginate(20);
 
-        return view('topics.index', compact('topics'));
+        $active_users = $user->getActiveUsers();
+
+        return view('topics.index', compact('topics', 'active_users'));
     }
 
     public function show(Request $request, Topic $topic)
