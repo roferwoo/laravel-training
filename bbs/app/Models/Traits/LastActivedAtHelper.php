@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 use Redis;
 use Carbon\Carbon;
+use DB;
 
 trait LastActivedAtHelper
 {
@@ -46,8 +47,20 @@ trait LastActivedAtHelper
             }
         }
 
+        // $this->batchUpdate($dates);
+
         // 以数据库为中心的存储，既已同步，即可删除
         Redis::del($hash);
+    }
+
+    private function batchUpdate($data) {
+        $sql = 'UPDATE `users` SET last_active_at=CASE id';
+        foreach ($data as $key => $activeTime) {
+            $user_id = str_replace($this->fieldPrefix, '', $key);   //将user_1转为1
+            $sql .= ' WHEN '.$user_id.' THEN "'.$activeTime.'"';
+        }
+        $sql .= ' ELSE last_active_at END';
+        DB::update($sql);
     }
 
     public function getLastActivedAtAttribute($value)
