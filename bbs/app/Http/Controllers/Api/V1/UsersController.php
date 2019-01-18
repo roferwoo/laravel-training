@@ -9,6 +9,7 @@ class UsersController extends ApiController
 {
     public function store(UserRequest $request)
     {
+        // 短信验证码数据
         $verifyData = \Cache::get($request->verification_key);
 
         if (!$verifyData) {
