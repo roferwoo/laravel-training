@@ -22,13 +22,26 @@ $api = app('Dingo\Api\Routing\Router');
 $api->version('v1', [
     'namespace' => 'App\Http\Controllers\Api\V1'
 ], function($api) {
-    // 短信验证码
-    $api->post('verificationCodes', 'VerificationCodesController@store')
-        ->name('api.verificationCodes.store');
+    // // 短信验证码
+    // $api->post('verificationCodes', 'VerificationCodesController@store')
+    //     ->name('api.verificationCodes.store');
+    //
+    // // 用户注册
+    // $api->post('users', 'UsersController@store')
+    //     ->name('api.users.store');
 
-    // 用户注册
-    $api->post('users', 'UsersController@store')
-        ->name('api.users.store');
+    $api->group([
+        'middleware' => 'api.throttle',// 节流机制
+        'limit' => config('api.rate_limits.sign.limit'),// 1,
+        'expires' => config('api.rate_limits.sign.expires'),// 1,
+    ], function($api) {
+        // 短信验证码
+        $api->post('verificationCodes', 'VerificationCodesController@store')
+            ->name('api.verificationCodes.store');
+        // 用户注册
+        $api->post('users', 'UsersController@store')
+            ->name('api.users.store');
+    });
 });
 
 // 测试 v1 v2
