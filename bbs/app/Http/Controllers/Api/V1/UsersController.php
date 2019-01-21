@@ -6,6 +6,7 @@ use App\Http\Requests\Api\V1\UserRequest;
 use App\Models\User;
 use App\Transformers\UserTransformer;
 use Auth;
+use App\Models\Image;
 
 class UsersController extends ApiController
 {
@@ -50,5 +51,21 @@ class UsersController extends ApiController
                 'expires_in' => Auth::guard('api')->factory()->getTTL() * 60
             ])
             ->setStatusCode(201);
+    }
+
+    public function update(UserRequest $request)
+    {
+        $user = $this->user();
+
+        $attributes = $request->only(['name', 'email', 'introduction']);
+
+        if ($request->avatar_image_id) {
+            $image = Image::find($request->avatar_image_id);
+
+            $attributes['avatar'] = $image->path;
+        }
+        $user->update($attributes);
+
+        return $this->response->item($user, new UserTransformer());
     }
 }
