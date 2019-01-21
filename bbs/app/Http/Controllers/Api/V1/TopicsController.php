@@ -14,7 +14,7 @@ class TopicsController extends ApiController
     {
         return $this->response->item($topic, new TopicTransformer());
     }
-    
+
     public function index(Request $request, Topic $topic)
     {
         $query = $topic->query();
