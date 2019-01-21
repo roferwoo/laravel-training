@@ -5,9 +5,43 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Requests\Api\V1\TopicRequest;
 use App\Models\Topic;
 use App\Transformers\TopicTransformer;
+use App\Http\Requests\Request;
+use App\Models\User;
 
 class TopicsController extends ApiController
 {
+    public function index(Request $request, Topic $topic)
+    {
+        $query = $topic->query();
+
+        if ($categoryId = $request->category_id) {
+            $query->where('category_id', $categoryId);
+        }
+
+        // 为了说明 N+1问题，不使用 scopeWithOrder
+        switch ($request->order) {
+            case 'recent':
+                $query->recent();
+                break;
+
+            default:
+                $query->recentReplied();
+                break;
+        }
+
+        $topics = $query->paginate(20);
+
+        return $this->response->paginator($topics, new TopicTransformer());
+    }
+
+    public function userIndex(User $user, Request $request)
+    {
+        $topics = $user->topics()->recent()
+            ->paginate(20);
+
+        return $this->response->paginator($topics, new TopicTransformer());
+    }
+
     public function store(TopicRequest $request, Topic $topic)
     {
         $topic->fill($request->all());
