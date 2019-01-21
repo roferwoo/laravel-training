@@ -10,6 +10,11 @@ use App\Models\User;
 
 class TopicsController extends ApiController
 {
+    public function show(Topic $topic)
+    {
+        return $this->response->item($topic, new TopicTransformer());
+    }
+    
     public function index(Request $request, Topic $topic)
     {
         $query = $topic->query();
