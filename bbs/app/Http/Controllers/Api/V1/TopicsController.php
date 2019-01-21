@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Requests\Api\V1\TopicRequest;
+use App\Models\Topic;
+use App\Transformers\TopicTransformer;
+
+class TopicsController extends ApiController
+{
+    public function store(TopicRequest $request, Topic $topic)
+    {
+        $topic->fill($request->all());
+        $topic->user_id = $this->user()->id;
+        $topic->save();
+
+        return $this->response->item($topic, new TopicTransformer())
+            ->setStatusCode(201);
+    }
+}
