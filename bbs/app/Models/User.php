@@ -8,6 +8,7 @@ use Auth;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\DatabaseNotification as Notification;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -28,6 +29,8 @@ class User extends Authenticatable implements JWTSubject
     use HasRoles;
     use Traits\ActiveUserHelper;
     use Traits\LastActivedAtHelper;
+
+    use HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -119,5 +122,14 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function findForPassport($username)
+    {
+        filter_var($username, FILTER_VALIDATE_EMAIL) ?
+            $credentials['email'] = $username :
+            $credentials['phone'] = $username;
+
+        return self::where($credentials)->first();
     }
 }

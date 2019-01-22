@@ -6,10 +6,22 @@ use App\Http\Requests\Api\V1\SocialAuthorizationRequest;
 use App\Models\User;
 use App\Http\Requests\Api\V1\AuthorizationRequest;
 use Auth;
+use Zend\Diactoros\Response as Psr7Response;
+use Psr\Http\Message\ServerRequestInterface;
+use League\OAuth2\Server\Exception\OAuthServerException;
+use League\OAuth2\Server\AuthorizationServer;
 
 class AuthorizationsController extends ApiController
 {
-    public function store(AuthorizationRequest $request)
+    public function store(AuthorizationRequest $originRequest, AuthorizationServer $server, ServerRequestInterface $serverRequest)
+    {
+        try {
+            return $server->respondToAccessTokenRequest($serverRequest, new Psr7Response)->withStatus(201);
+        } catch(OAuthServerException $e) {
+            return $this->response->errorUnauthorized($e->getMessage());
+        }
+    }
+    /*public function store(AuthorizationRequest $request)
     {
         $username = $request->username;
 
@@ -31,19 +43,32 @@ class AuthorizationsController extends ApiController
         // ])->setStatusCode(201);
 
         return $this->respondWithToken($token)->setStatusCode(201);
-    }
+    }*/
 
-    public function update()
+    public function update(AuthorizationServer $server, ServerRequestInterface $serverRequest)
+    {
+        try {
+            return $server->respondToAccessTokenRequest($serverRequest, new Psr7Response);
+        } catch(OAuthServerException $e) {
+            return $this->response->errorUnauthorized($e->getMessage());
+        }
+    }
+    /*public function update()
     {
         $token = Auth::guard('api')->refresh();
         return $this->respondWithToken($token);
-    }
-
+    }*/
+    
     public function destroy()
+    {
+        $this->user()->token()->revoke();
+        return $this->response->noContent();
+    }
+    /*public function destroy()
     {
         Auth::guard('api')->logout();
         return $this->response->noContent();
-    }
+    }*/
 
     public function socialStore($type, SocialAuthorizationRequest $request)
     {
