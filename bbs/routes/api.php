@@ -120,6 +120,10 @@ $api->version('v1', [
             //     ->name('api.user.notifications.read');
             $api->patch('user/read/notifications/{notification?}', 'NotificationsController@read')
                 ->name('api.user.notifications.read');
+
+            // 当前登录用户权限
+            $api->get('user/permissions', 'PermissionsController@index')
+                ->name('api.user.permissions.index');
         });
     });
 });
