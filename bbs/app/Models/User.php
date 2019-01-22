@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Auth;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\DatabaseNotification as Notification;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -63,11 +64,24 @@ class User extends Authenticatable implements JWTSubject
         return $this->id == $model->user_id;
     }
 
-    public function markAsRead()
-    {
-        $this->notification_count = 0;
+    // public function markAsRead()
+    // {
+    //     $this->notification_count = 0;
+    //     $this->save();
+    //     $this->unreadNotifications->markAsRead();
+    // }
+
+    //标记用户通知为已读
+    public function markAsRead(Notification $notification = null) {
+        if ($notification) {    //标记单条已读
+            --$this->notification_count;
+            $notification->markAsRead();
+        } else {    //标记全部已读
+            $this->notification_count = 0;
+            $this->unreadNotifications->markAsRead();
+        }
+
         $this->save();
-        $this->unreadNotifications->markAsRead();
     }
 
     public function setPasswordAttribute($value)
