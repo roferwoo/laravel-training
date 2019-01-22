@@ -21,7 +21,7 @@ $api = app('Dingo\Api\Routing\Router');
 
 $api->version('v1', [
     'namespace' => 'App\Http\Controllers\Api\V1',
-    'middleware' => ['serializer:array', 'bindings'],// 'serializer:array',
+    'middleware' => ['serializer:array', 'bindings', 'change-locale'],// 'serializer:array',
 ], function($api) {
     // // 短信验证码
     // $api->post('verificationCodes', 'VerificationCodesController@store')
@@ -82,6 +82,9 @@ $api->version('v1', [
         // 资源推荐
         $api->get('links', 'LinksController@index')
             ->name('api.links.index');
+        // 活跃用户
+        $api->get('actived/users', 'UsersController@activedIndex')
+            ->name('api.actived.users.index');
 
         // 需要 token 验证的接口
         $api->group(['middleware' => 'api.auth'], function($api) {
