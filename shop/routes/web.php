@@ -33,6 +33,10 @@ Route::group(['middleware' => 'auth'], function() {
 
         // 收货地址列表
         Route::get('user_addresses', 'UserAddressesController@index')->name('user_addresses.index');
+        // 新增收货地址页面
+        Route::get('user_addresses/create', 'UserAddressesController@create')->name('user_addresses.create');
+        // 创建收货地址
+        Route::post('user_addresses', 'UserAddressesController@store')->name('user_addresses.store');
 
 
         // 测试中间件 email_verified
