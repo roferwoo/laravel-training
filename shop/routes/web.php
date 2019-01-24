@@ -31,7 +31,8 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::group(['middleware' => 'email_verified'], function() {
 
-
+        // 收货地址列表
+        Route::get('user_addresses', 'UserAddressesController@index')->name('user_addresses.index');
 
 
         // 测试中间件 email_verified
