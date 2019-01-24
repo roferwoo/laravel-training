@@ -20,3 +20,16 @@ Route::get('/', 'PagesController@root')->name('root');
 // Laravel 的用户认证路由
 Auth::routes();
 
+Route::group(['middleware' => 'auth'], function() {
+
+    Route::get('/email_verify_notice', 'PagesController@emailVerifyNotice')->name('email_verify_notice');
+
+    // 开始 测试中间件 email_verified
+    Route::group(['middleware' => 'email_verified'], function() {
+        Route::get('/test', function() {
+            return 'Your email is verified';
+        });
+    });
+    // 结束
+});
+
