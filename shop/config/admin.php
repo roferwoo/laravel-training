@@ -129,7 +129,7 @@ return [
     'upload' => [
 
         // Disk in `config/filesystem.php`. 对应 filesystem.php 中的 disks
-        'disk' => 'admin',
+        'disk' => 'public',// 'admin',
 
         // Image and file upload path under the disk above.
         'directory' => [
