@@ -15,12 +15,17 @@
 //     return view('welcome');
 // });
 
-Route::get('/', 'PagesController@root')->name('root');
+// Route::get('/', 'PagesController@root')->name('root');
+Route::redirect('/', '/products')->name('root');
+// 商品列表
+Route::get('products', 'ProductsController@index')->name('products.index');
 
 // Laravel 的用户认证路由
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group([
+    'middleware' => 'auth'
+], function() {
 
     // 验证邮箱提示
     Route::get('/email_verify_notice', 'PagesController@emailVerifyNotice')->name('email_verify_notice');
@@ -51,4 +56,6 @@ Route::group(['middleware' => 'auth'], function() {
         });
     });
 });
+
+
 
