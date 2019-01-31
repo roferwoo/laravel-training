@@ -6,6 +6,7 @@
 /public/fonts
 /public/mix-manifest.json
 /storage/*.key
+/resources/wechat_pay
 /vendor
 /.idea
 /.vagrant
