@@ -89,6 +89,9 @@ Route::group([
         // 支付宝付款 前端回调
         Route::get('payment/alipay/return', 'PaymentController@alipayReturn')->name('payment.alipay.return');
 
+        // 微信支付付款
+        Route::get('payment/{order}/wechat', 'PaymentController@payByWechat')->name('payment.wechat');
+
 
 
         // 测试中间件 email_verified
@@ -101,6 +104,8 @@ Route::group([
 
 // 支付宝付款 服务器回调
 Route::post('payment/alipay/notify', 'PaymentController@alipayNotify')->name('payment.alipay.notify');
+// 微信支付付款 服务器回调
+Route::post('payment/wechat/notify', 'PaymentController@wechatNotify')->name('payment.wechat.notify');
 
 
 
