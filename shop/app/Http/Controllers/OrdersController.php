@@ -66,6 +66,8 @@ class OrdersController extends Controller
             return $order;
         });
 
+        $this->dispatch(new CloseOrder($order, config('app.order_ttl')));
+
         return $order;
     }
 }
