@@ -84,14 +84,23 @@ Route::group([
         // 订单详请
         Route::get('orders/{order}', 'OrdersController@show')->name('orders.show');
 
+        // 支付宝付款
+        Route::get('payment/{order}/alipay', 'PaymentController@payByAlipay')->name('payment.alipay');
+        // 支付宝付款 前端回调
+        Route::get('payment/alipay/return', 'PaymentController@alipayReturn')->name('payment.alipay.return');
+
 
 
         // 测试中间件 email_verified
         Route::get('/test', function() {
             return 'Your email is verified';
         });
+
     });
 });
+
+// 支付宝付款 服务器回调
+Route::post('payment/alipay/notify', 'PaymentController@alipayNotify')->name('payment.alipay.notify');
 
 
 
