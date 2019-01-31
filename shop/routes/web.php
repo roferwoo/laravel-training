@@ -15,14 +15,16 @@
 //     return view('welcome');
 // });
 
+// Laravel 在匹配路由的时候会按定义的顺序依次查找，找到第一个匹配的路由就返回
+
 // Route::get('/', 'PagesController@root')->name('root');
 Route::redirect('/', '/products')->name('root');
 
 // 商品列表
 Route::get('products', 'ProductsController@index')->name('products.index');
 // 商品详情
-Route::get('products/{product}', 'ProductsController@show')->name('products.show');
-
+// Route::get('products/{product}', 'ProductsController@show')->name('products.show');
+Route::get('products/{product}', 'ProductsController@show')->name('products.show')->where(['product' => '[0-9]+']);
 
 // Laravel 的用户认证路由
 Auth::routes();
@@ -57,6 +59,8 @@ Route::group([
         Route::post('products/{product}/favorite', 'ProductsController@favor')->name('products.favor');
         // 取消收藏
         Route::delete('products/{product}/favorite', 'ProductsController@disfavor')->name('products.disfavor');
+        // 收藏商品列表
+        Route::get('products/favorites', 'ProductsController@favorites')->name('products.favorites');
 
 
 
