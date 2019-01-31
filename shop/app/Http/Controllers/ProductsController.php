@@ -4,9 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Exceptions\InvalidRequestException;
 
 class ProductsController extends Controller
 {
+
+    public function show(Request $request, Product $product)
+    {
+        // 判断商品是否已经上架，如果没有上架则抛出异常。
+        if (!$product->on_sale) {
+            throw new InvalidRequestException('商品未上架');
+        }
+
+        return view('products.show', ['product' => $product]);
+    }
+
     public function index(Request $request)
     {
         // $products = Product::query()->where('on_sale', true)->paginate(16);
@@ -41,6 +53,14 @@ class ProductsController extends Controller
                 }
             }
         }
+
+        // 不使用正则
+        // if (ends_with($order, ['_asc', '_desc']) && list($order_by_field, $order_by) = explode('_', $order)) {
+        //
+        //     if (!empty(['price' => true, 'sold_count' => true, 'rating' => true][$order_by_field])) {
+        //         $builder->orderBy($order_by_field, $order_by);
+        //     }
+        // }
 
         $products = $builder->paginate(16);
 
