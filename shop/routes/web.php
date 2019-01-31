@@ -53,6 +53,12 @@ Route::group([
         // 删除收货地址
         Route::delete('user_addresses/{user_address}', 'UserAddressesController@destroy')->name('user_addresses.destroy');
 
+        // 收藏商品
+        Route::post('products/{product}/favorite', 'ProductsController@favor')->name('products.favor');
+        // 取消收藏
+        Route::delete('products/{product}/favorite', 'ProductsController@disfavor')->name('products.disfavor');
+
+
 
         // 测试中间件 email_verified
         Route::get('/test', function() {
