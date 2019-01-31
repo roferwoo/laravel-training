@@ -14,6 +14,13 @@ use App\Jobs\CloseOrder;
 class OrdersController extends Controller
 {
 
+    public function show(Request $request, Order $order)
+    {
+        $this->authorize('own', $order);
+        
+        return view('orders.show', ['order' => $order->load(['items.productSku', 'items.product'])]);
+    }
+
     public function index(Request $request)
     {
         $orders = Order::query()
