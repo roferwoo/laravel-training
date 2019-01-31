@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CartService;
 use Illuminate\Http\Request;
 use App\Http\Requests\OrderRequest;
 use App\Models\ProductSku;
@@ -17,7 +18,7 @@ class OrdersController extends Controller
     public function show(Request $request, Order $order)
     {
         $this->authorize('own', $order);
-        
+
         return view('orders.show', ['order' => $order->load(['items.productSku', 'items.product'])]);
     }
 
@@ -33,12 +34,21 @@ class OrdersController extends Controller
         return view('orders.index', ['orders' => $orders]);
     }
 
-    public function store(OrderRequest $request)
+    public function store(OrderRequest $request, OrderService $orderService)
+    {
+        $user    = $request->user();
+        $address = UserAddress::find($request->input('address_id'));
+
+        return $orderService->store($user, $address, $request->input('remark'), $request->input('items'));
+    }
+
+    /*
+    public function store(OrderRequest $request, CartService $cartService)
     {
         $user  = $request->user();
 
         // 开启一个数据库事务
-        $order = \DB::transaction(function () use ($user, $request) {
+        $order = \DB::transaction(function () use ($user, $request, $cartService) {
             $address = UserAddress::find($request->input('address_id'));
             // 更新此地址的最后使用时间
             $address->update(['last_used_at' => Carbon::now()]);
@@ -83,7 +93,8 @@ class OrdersController extends Controller
 
             // 将下单的商品从购物车中移除
             $skuIds = collect($items)->pluck('sku_id');
-            $user->cartItems()->whereIn('product_sku_id', $skuIds)->delete();
+            // $user->cartItems()->whereIn('product_sku_id', $skuIds)->delete();
+            $cartService->remove($skuIds);
 
             return $order;
         });
@@ -92,4 +103,5 @@ class OrdersController extends Controller
 
         return $order;
     }
+    */
 }
