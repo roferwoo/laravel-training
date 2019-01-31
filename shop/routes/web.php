@@ -17,6 +17,14 @@
 
 // Laravel 在匹配路由的时候会按定义的顺序依次查找，找到第一个匹配的路由就返回
 
+// Route::get('alipay', function() {
+//     return app('alipay')->web([
+//         'out_trade_no' => time(),
+//         'total_amount' => '1',
+//         'subject' => 'test subject - 测试',
+//     ]);
+// });
+
 // Route::get('/', 'PagesController@root')->name('root');
 Route::redirect('/', '/products')->name('root');
 
