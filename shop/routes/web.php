@@ -62,6 +62,9 @@ Route::group([
         // 收藏商品列表
         Route::get('products/favorites', 'ProductsController@favorites')->name('products.favorites');
 
+        // 添加购物车
+        Route::post('cart', 'CartController@add')->name('cart.add');
+
 
 
         // 测试中间件 email_verified
