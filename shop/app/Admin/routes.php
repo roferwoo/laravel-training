@@ -21,4 +21,8 @@ Route::group([
     $router->get('products/{id}/edit', 'ProductsController@edit');// 编辑页面
     $router->put('products/{id}', 'ProductsController@update');// 编辑保存
 
+    // 订单管理
+    $router->get('orders', 'OrdersController@index')->name('admin.orders.index');// 列表
+    $router->get('orders/{order}', 'OrdersController@show')->name('admin.orders.show');// 详情
+
 });
