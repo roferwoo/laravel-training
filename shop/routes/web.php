@@ -92,7 +92,8 @@ Route::group([
         // 微信支付付款
         Route::get('payment/{order}/wechat', 'PaymentController@payByWechat')->name('payment.wechat');
 
-
+        // 确认收货
+        Route::post('orders/{order}/received', 'OrdersController@received')->name('orders.received');
 
         // 测试中间件 email_verified
         Route::get('/test', function() {
