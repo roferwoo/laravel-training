@@ -94,6 +94,11 @@ Route::group([
 
         // 确认收货
         Route::post('orders/{order}/received', 'OrdersController@received')->name('orders.received');
+        // 评价页面
+        Route::get('orders/{order}/review', 'OrdersController@review')->name('orders.review.show');
+        // 评价内容
+        Route::post('orders/{order}/review', 'OrdersController@sendReview')->name('orders.review.store');
+
 
         // 测试中间件 email_verified
         Route::get('/test', function() {
